@@ -41,6 +41,11 @@ function showRequest(daText) {
 }
 
 function showResponse(lexResponse) {
+  var wisdomText = document.getElementById("wisdom");
+
+  wisdomText.value = "";
+  wisdomText.locked = false;
+
   var conversationDiv = document.getElementById("conversation");
   var responsePara = document.createElement("P");
   responsePara.className = "lexResponse";
@@ -108,13 +113,13 @@ const createResponse = async () => {
     //   );
     //create PO from requisition
     //var daText = data.TranslatedText;
-    var daText = "create po from requisition";
+    //var daText = "create po from requisition";
     //console.log("Success. Translated text: ", data.TranslatedText);
     const lexParams = {
       botName: "FISBotTest",
       botAlias: "FISBOTnode",
       //inputText: data.TranslatedText,
-      inputText: daText,
+      inputText: wisdom,
       userId: "chatbot-demo", // For example, 'chatbot-demo'.
     };
     try {
