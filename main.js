@@ -115,8 +115,8 @@ https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/lex-bot-exampl
 */
 
 // snippet-start:[cross-service.JavaScript.lex-app.backendV3]
-
-//    "StackId": "arn:aws:cloudformation:us-west-2:521503643683:stack/LEXTEST/7e3ffab0-ec25-11ec-9503-06305ef04965"
+// aws cloudformation create-stack --stack-name LEXTEST --template-body file://setup.yaml --capabilities CAPABILITY_IAM
+// "StackId": "arn:aws:cloudformation:us-west-2:521503643683:stack/LEXTEST/7e3ffab0-ec25-11ec-9503-06305ef04965"
 
 
 
@@ -222,6 +222,7 @@ const createResponseTranslate = async () => {
     //handletext(wisdom);
 
     //crear po a partir de la solicitud
+    //create PO from requisition
 
     const comprehendParams = {
       Text: wisdom,
@@ -237,8 +238,6 @@ const createResponseTranslate = async () => {
 
       var language = data.Languages[0].LanguageCode;
       console.log("Success. The language code is: ", language);
-
-      //create PO from requisition
 
       const translateParams = {
         SourceLanguageCode: language,

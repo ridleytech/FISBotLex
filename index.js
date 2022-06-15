@@ -12,8 +12,8 @@ https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/lex-bot-exampl
 */
 
 // snippet-start:[cross-service.JavaScript.lex-app.backendV3]
-
-//    "StackId": "arn:aws:cloudformation:us-west-2:521503643683:stack/LEXTEST/7e3ffab0-ec25-11ec-9503-06305ef04965"
+// aws cloudformation create-stack --stack-name LEXTEST --template-body file://setup.yaml --capabilities CAPABILITY_IAM
+// "StackId": "arn:aws:cloudformation:us-west-2:521503643683:stack/LEXTEST/7e3ffab0-ec25-11ec-9503-06305ef04965"
 
 import { DetectDominantLanguageCommand } from "@aws-sdk/client-comprehend";
 import { TranslateTextCommand } from "@aws-sdk/client-translate";
