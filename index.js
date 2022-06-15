@@ -35,7 +35,7 @@ function showRequest(daText) {
   var conversationDiv = document.getElementById("conversation");
   var requestPara = document.createElement("P");
   requestPara.className = "userRequest";
-  requestPara.appendChild(document.createTextNode(g_text));
+  requestPara.appendChild(document.createTextNode(daText));
   conversationDiv.appendChild(requestPara);
   conversationDiv.scrollTop = conversationDiv.scrollHeight;
 }
@@ -77,11 +77,12 @@ function loadNewItems(event) {
   wisdomText.locked = false;
 }
 
-// Respond to user's input.
 const createResponse = async () => {
   // Confirm there is text to submit.
   var wisdomText = document.getElementById("wisdom");
   if (wisdomText && wisdomText.value && wisdomText.value.trim().length > 0) {
+    showRequest(wisdomText.value);
+
     // Disable input to show it is being sent.
     var wisdom = wisdomText.value.trim();
     wisdomText.value = "...";
@@ -89,37 +90,12 @@ const createResponse = async () => {
 
     //handletext(wisdom);
 
-    const comprehendParams = {
-      Text: wisdom,
-    };
-    // try {
-    //   const data = await comprehendClient.send(
-    //     new DetectDominantLanguageCommand(comprehendParams)
-    //   );
-    //   console.log(
-    //     "Success. The language code is: ",
-    //     data.Languages[0].LanguageCode
-    //   );
-    const translateParams = {
-      //SourceLanguageCode: data.Languages[0].LanguageCode,
-      SourceLanguageCode: "en",
+    var daText = wisdom;
 
-      TargetLanguageCode: "en", // For example, "en" for English.
-      Text: wisdom,
-    };
-    // try {
-    //   const data = await translateClient.send(
-    //     new TranslateTextCommand(translateParams)
-    //   );
-    //create PO from requisition
-    //var daText = data.TranslatedText;
-    //var daText = "create po from requisition";
-    //console.log("Success. Translated text: ", data.TranslatedText);
     const lexParams = {
       botName: "FISBotTest",
       botAlias: "FISBOTnode",
-      //inputText: data.TranslatedText,
-      inputText: wisdom,
+      inputText: daText,
       userId: "chatbot-demo", // For example, 'chatbot-demo'.
     };
     try {
@@ -130,14 +106,82 @@ const createResponse = async () => {
     } catch (err) {
       console.log("Error responding to message. ", err);
     }
-    // } catch (err) {
-    //   console.log("Error translating text. ", err);
-    // }
-    // } catch (err) {
-    //   console.log("Error identifying language. ", err);
-    // }
+  }
+};
+
+// Respond to user's input.
+const createResponseTranslate = async () => {
+  // Confirm there is text to submit.
+  var wisdomText = document.getElementById("wisdom");
+  if (wisdomText && wisdomText.value && wisdomText.value.trim().length > 0) {
+    // Disable input to show it is being sent.
+    var wisdom = wisdomText.value.trim();
+    wisdomText.value = "...";
+    wisdomText.locked = true;
+
+    showRequest(wisdom);
+
+    //handletext(wisdom);
+
+    //crear po a partir de la solicitud
+
+    const comprehendParams = {
+      Text: wisdom,
+    };
+    try {
+      const data = await comprehendClient.send(
+        new DetectDominantLanguageCommand(comprehendParams)
+      );
+
+      var language = data.Languages[0].LanguageCode;
+      console.log("Success. The language code is: ", language);
+
+      //create PO from requisition
+
+      const translateParams = {
+        SourceLanguageCode: language,
+        //SourceLanguageCode: "en",
+
+        TargetLanguageCode: "en",
+        Text: wisdom,
+      };
+      try {
+        const data = await translateClient.send(
+          new TranslateTextCommand(translateParams)
+        );
+        var daText = data.TranslatedText;
+
+        if (language != "en") {
+          showRequest("Translated: " + daText);
+        }
+
+        //var daText = "create po from requisition";
+        console.log("Success. Translated text: ", data.TranslatedText);
+        const lexParams = {
+          botName: "FISBotTest",
+          botAlias: "FISBOTnode",
+          inputText: daText,
+          //inputText: wisdom,
+          userId: "chatbot-demo", // For example, 'chatbot-demo'.
+        };
+        try {
+          const data = await lexClient.send(new PostTextCommand(lexParams));
+          console.log("Success. Response is: ", data.message);
+          var msg = data.message;
+          showResponse(msg);
+        } catch (err) {
+          console.log("Error responding to message. ", err);
+        }
+      } catch (err) {
+        console.log("Error translating text. ", err);
+      }
+    } catch (err) {
+      console.log("Error identifying language. ", err);
+    }
   }
 };
 // Make the function available to the browser.
 window.createResponse = createResponse;
+window.createResponseTranslate = createResponseTranslate;
+
 // snippet-end:[cross-service.JavaScript.lex-app.backendV3]
