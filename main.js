@@ -101,8 +101,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs_lex_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./libs/lex.js */ "./libs/lex.js");
 /* harmony import */ var _libs_translate_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./libs/translate.js */ "./libs/translate.js");
 /* harmony import */ var _libs_comp_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./libs/comp.js */ "./libs/comp.js");
-/*Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-    SPDX-License-Identifier: Apache-2.0
+/*
 
 ABOUT THIS NODE.JS EXAMPLE: This example works with the AWS SDK for JavaScript version 3 (v3),
 which is available at https://github.com/aws/aws-sdk-js-v3. This example is in the
@@ -113,10 +112,6 @@ index.js is part of a tutorial demonstrating how to build and deploy an Amazon L
 within a web application to engage your web site visitors. To run the full tutorial, see
 https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/lex-bot-example.html.
 
-Inputs (replace in code):
-- BOT_ALIAS
-- BOT_NAME
-- USER_ID
 */
 
 // snippet-start:[cross-service.JavaScript.lex-app.backendV3]
@@ -134,11 +129,11 @@ var g_text = "";
 // Set the focus to the input box.
 document.getElementById("wisdom").focus();
 
-function showRequest(daText) {
+function showRequest(_theText) {
   var conversationDiv = document.getElementById("conversation");
   var requestPara = document.createElement("P");
   requestPara.className = "userRequest";
-  requestPara.appendChild(document.createTextNode(daText));
+  requestPara.appendChild(document.createTextNode(_theText));
   conversationDiv.appendChild(requestPara);
   conversationDiv.scrollTop = conversationDiv.scrollHeight;
 }
@@ -193,12 +188,12 @@ const createResponse = async () => {
 
     //handletext(wisdom);
 
-    var daText = wisdom;
+    var theText = wisdom;
 
     const lexParams = {
       botName: "FISBotTest",
       botAlias: "FISBOTnode",
-      inputText: daText,
+      inputText: theText,
       userId: "chatbot-demo", // For example, 'chatbot-demo'.
     };
     try {
@@ -226,6 +221,8 @@ const createResponseTranslate = async () => {
 
     //handletext(wisdom);
 
+    //crear po a partir de la solicitud
+
     const comprehendParams = {
       Text: wisdom,
     };
@@ -234,6 +231,10 @@ const createResponseTranslate = async () => {
         new _aws_sdk_client_comprehend__WEBPACK_IMPORTED_MODULE_0__["DetectDominantLanguageCommand"](comprehendParams)
       );
 
+      //console.log("comprehend data: ", JSON.stringify(data));
+
+      //{"$metadata":{"httpStatusCode":200,"requestId":"9c0f6051-ae80-44d1-86f8-b65db241881f","attempts":1,"totalRetryDelay":0},"Languages":[{"LanguageCode":"en","Score":0.9663455486297607}]}
+
       var language = data.Languages[0].LanguageCode;
       console.log("Success. The language code is: ", language);
 
@@ -241,8 +242,6 @@ const createResponseTranslate = async () => {
 
       const translateParams = {
         SourceLanguageCode: language,
-        //SourceLanguageCode: "en",
-
         TargetLanguageCode: "en",
         Text: wisdom,
       };
@@ -250,19 +249,17 @@ const createResponseTranslate = async () => {
         const data = await _libs_translate_js__WEBPACK_IMPORTED_MODULE_4__["translateClient"].send(
           new _aws_sdk_client_translate__WEBPACK_IMPORTED_MODULE_1__["TranslateTextCommand"](translateParams)
         );
-        var daText = data.TranslatedText;
+        var theText = data.TranslatedText;
+        console.log("Success. Translated text: ", theText);
 
         if (language != "en") {
-          showRequest("Translated: " + daText);
+          showRequest("Translated: " + theText);
         }
 
-        //var daText = "create po from requisition";
-        console.log("Success. Translated text: ", data.TranslatedText);
         const lexParams = {
           botName: "FISBotTest",
           botAlias: "FISBOTnode",
-          inputText: daText,
-          //inputText: wisdom,
+          inputText: theText,
           userId: "chatbot-demo", // For example, 'chatbot-demo'.
         };
         try {
@@ -281,7 +278,8 @@ const createResponseTranslate = async () => {
     }
   }
 };
-// Make the function available to the browser.
+
+// Make the functions available to the browser.
 window.createResponse = createResponse;
 window.createResponseTranslate = createResponseTranslate;
 
