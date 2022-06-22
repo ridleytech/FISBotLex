@@ -23,6 +23,7 @@ import { translateClient } from "./libs/translate.js";
 import { comprehendClient } from "./libs/comp.js";
 
 var g_text = "";
+
 // Set the focus to the input box.
 document.getElementById("wisdom").focus();
 

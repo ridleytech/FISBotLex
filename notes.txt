@@ -1,3 +1,12 @@
 https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/javascriptv3/example_code/cross-services/lex-bot
 https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/lex-bot-example-script.html
 https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lex-runtime-v2/index.html
+https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-lex-runtime-service/index.html
+https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/LexModelBuildingService.html#putBot-property
+https://docs.aws.amazon.com/lex/latest/dg/API_PutBot.html
+
+
+https://dmk70yvot4okp.cloudfront.net/index.html
+
+https://www.npmjs.com/package/react-expandable-treeview
+
