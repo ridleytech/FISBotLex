@@ -2,53 +2,29 @@ import logo from "./logo.svg";
 import "./App.css";
 import TreeView from "react-expandable-treeview";
 
-// const data = [
-//   {
-//     id: 0,
-//     label: "A Father",
-//     children: [
-//       {
-//         id: 1,
-//         label: "A Son",
-//       },
-//       {
-//         id: 2,
-//         label: "Another Son",
-//       },
-//     ],
-//     id: 3,
-//     label: "Another Father",
-//     children: [
-//       {
-//         id: 4,
-//         children: [
-//           {
-//             id: 5,
-//             label: "Yet Another Son",
-//           },
-//         ],
-//       },
-//     ],
-//   },
-// ];
-
 const data = [
   {
     id: 0,
-    intent: "HowToCreate",
+    intent: "",
     conditions: [
       {
         id: 5,
-        label: "Requisition",
+        label: "#HowToCreate",
         type: "or",
       },
       {
         id: 5,
-        label: "AR",
+        label: "@Requisition",
+        type: "or",
+      },
+      {
+        id: 5,
+        label: "@AR",
         type: "or",
       },
     ],
     id: 3,
+    response: "(RID1)",
   },
   {
     id: 0,
@@ -56,17 +32,16 @@ const data = [
     conditions: [
       {
         id: 5,
-        label: "Requisition",
+        label: "#HowToEdit",
         type: "or",
       },
-    ],
-    conditions: [
       {
         id: 5,
-        label: "PO",
+        label: "@Requisition",
         type: "or",
       },
     ],
+    response: "(RID2)",
   },
 ];
 function App() {
@@ -85,10 +60,38 @@ function App() {
               marginBottom: "10px",
             }}
           >
-            <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+            {/* <div style={{ fontSize: "18px", fontWeight: "bold" }}>
               {ob.intent}
-            </div>
-            <div style={{ marginTop: "10px" }}>
+            </div> */}
+
+            <input
+              type="text"
+              name={ob.intent}
+              value={ob.intent}
+              placeholder="Enter node name (optional)"
+              style={{
+                marginRight: "20px",
+                backgroundColor: "#F4F4F4",
+                height: "25px",
+                display: "flex",
+                alignItems: "center",
+                padding: "5px",
+                fontSize: "17px",
+                width: "99%",
+              }}
+            />
+
+            <div
+              style={{
+                width: "100%",
+                height: "2px",
+                backgroundColor: "lightgray",
+                marginTop: "35px",
+                marginBottom: "35px",
+              }}
+            ></div>
+
+            <div>
               <div
                 style={{
                   marginBottom: "10px",
@@ -114,9 +117,9 @@ function App() {
                           marginRight: "20px",
                           backgroundColor: "#F4F4F4",
                           height: "25px",
-                          display: "flex",
-                          alignItems: "center",
                           padding: "5px",
+                          fontSize: "17px",
+                          marginBottom: "10px",
                         }}
                       />
                       {index < ob.conditions.length - 1 ? (
@@ -128,11 +131,11 @@ function App() {
                             marginRight: "20px",
                             backgroundColor: "#F4F4F4",
                             height: "25px",
-                            display: "flex",
-                            alignItems: "center",
+                            marginBottom: "10px",
                             textAlign: "center",
                             padding: "5px",
                             width: "30px",
+                            fontSize: "17px",
                           }}
                         />
                       ) : null}
@@ -140,6 +143,30 @@ function App() {
                   );
                 })}
               </div>
+              <div
+                style={{
+                  marginTop: "20px",
+                  marginBottom: "10px",
+                }}
+              >
+                Lex responds:
+              </div>
+
+              <textarea
+                type="text"
+                name={ob.response}
+                value={ob.response}
+                style={{
+                  marginRight: "20px",
+                  backgroundColor: "#F4F4F4",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "5px",
+                  height: "20px",
+                  width: "99%",
+                  fontSize: "17px",
+                }}
+              />
             </div>
           </div>
         );
